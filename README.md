@@ -8,7 +8,7 @@ Usage
 
 1. git clone this thing
 2. Install dependencies: express, connect, oauth. 
-3. Build Faye from my fork, which includes HTTPS, Cookies, and a small workaround for a bug in the pilot: cd node_modules && git clone git@github.com:aashay/faye.git
+3. Build Faye from my fork, which includes HTTPS, Cookies, and a small workaround for a bug in the pilot: cd node_modules && git clone git@github.com:aashay/faye.git  (See also: [https://github.com/aashay/faye](https://github.com/aashay/faye)
 4. cd faye
 5. Build faye according to the readme instructions (starting with "Install dependencies"). You don't need to run tests but it's probably a good idea! :)
 6. Make sure to run jake as part of the process.  This will output the required files into the /build folder which is where our server.js will look for its faye files.
