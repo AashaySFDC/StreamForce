@@ -1,8 +1,10 @@
 Force.com Streaming Pilot demo in Node!
--------------------
+====================================
 
 Before you attempt to try this thing, make sure you have a PushTopic created in your org according to the official docs.  Once your server is up and running, create an object in your org using the API or whatever you want.
 
+Usage
+------
 
 1. git clone this thing
 2. Install dependencies: express, connect, oauth. 
