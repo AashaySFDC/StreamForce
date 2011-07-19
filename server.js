@@ -67,11 +67,11 @@ var oa = new OAuth(config.CLIENT_ID, config.CLIENT_SECRET,
 //Redirect to do the oauth dance if we don't have an access token in this user's session
 app.get('/', function(req,res){    
     if(!req.session.access_token) {
-		res.redirect("/oauthDance");
-	}
-	else {		
-		res.redirect('/stream');
-	}    
+	res.redirect("/oauthDance");
+    }
+    else {		
+	res.redirect('/stream');
+    }    
 });
 
 app.get('/oauthDance', function(req,res){         
