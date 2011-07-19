@@ -15,7 +15,7 @@ rest = require('restler'),
 sys = require('sys'),
 express = require('express'),
 url = require('url'),
-faye = require('faye'),
+faye = require('faye/build'),
 OAuth = require('oauth').OAuth2;
 
 //Monkey-patch OAuth2's get method to include some nice headers
@@ -104,7 +104,6 @@ app.get('/oauth/yay', function(req,res){
 
 //Hooray streaming!
 app.get('/stream', function(req,res){    
-        req.session.access_token = "00D80000000ajhG!AQcAQEe88NFUXUFVRB3mn9nBT.B6Vbts4VSPWpV90RxTUtf2BGVmwbCMw_RX4tu3iA8vibiGd6eXaQUCpPDBL40rC2WCZeYZ";
         if(!req.session.access_token){
             res.redirect("/oauthDance");
         }else{
