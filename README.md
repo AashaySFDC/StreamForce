@@ -14,7 +14,7 @@ Usage
 6. Make sure to run jake as part of the process.  This will output the required files into the /build folder which is where our server.js will look for its faye files.
 7. Make sure your app is properly configured in your org.  Setup > Develop > Remote Access  (I use localhost:4567/oauth/yay as my callback url).
 8. Create a file called config.js at the root of your app (same place as server.js) and make it look like the following:
-
+<pre>
     
     exports.PORT = process.env.PORT || 4567; 
     exports.cookieMaxAge = 3600000; //length of idle session in ms
@@ -27,7 +27,7 @@ Usage
     exports.CLIENT_SECRET = process.env.CLIENT_SECRET || 'superSecret';
 
     exports.LOGIN = "you@yourorg.com";
-
+</pre>
 9. node server.js 
 
 10. Open up your browser at [http://localhost:4567](http://localhost:4567).  When your browser tells you to check the console, go watch the fun!
