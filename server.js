@@ -21,6 +21,21 @@ OAuth.prototype.get= function(url, access_token, callback) {
   this._request("GET", url, {"Authorization":"OAuth " + access_token, "X-PrettyPrint":"1"}, access_token, callback );
 }
 
+//Monkey-patch OAuth2's getOAuthAccessToken to make entire response available
+OAuth.prototype.getOAuthAccessToken= function(code, params, callback) {
+  var params= params || {};
+  params['code']= code;
+
+  this._request("POST", this._getAccessTokenUrl(params), {}, null, function(error, data, response) {
+    if( error ) {
+        callback(error);
+    } else {
+        console.log("GOT OAUTH RESPONSE: "+data);
+        callback(null, JSON.parse( data ));
+    }
+  });
+}
+
 //Nobody should ever use MemoryStore in production.  If you do...what are you doing?!?!
 MemoryStore = require('connect').session.MemoryStore;
 var sessionStore = new MemoryStore();
@@ -84,15 +99,16 @@ app.get('/oauth/yay', function(req,res){
     var code = req.query.code;
     if(!code){ console.log ("GOT NO CODE MANG"); }
     else{        
-        oa.getOAuthAccessToken(code,{redirect_uri : "http://localhost:"+config.PORT+"/oauth/yay",grant_type: "authorization_code"}, function(error, access_token, refresh_token){
+        oa.getOAuthAccessToken(code,{redirect_uri : "http://localhost:"+config.PORT+"/oauth/yay",grant_type: "authorization_code"}, function(error, response){
              if(error) { 
                  console.log('error');
                  console.log(error); 
              }else{ 
                  // store the tokens in the session req.session.oa = oa; req.session.oauth_token = oauth_token;
-                 req.session.access_token = access_token;
-                 req.session.refresh_token = refresh_token;
-                 console.log("ACCESS TOKEN ACQUIRED: " + access_token);           
+                 req.session.access_token = response.access_token;
+                 req.session.refresh_token = response.refresh_token;
+                 req.session.instance_url = response.instance_url;
+                 console.log("ACCESS TOKEN ACQUIRED: " + req.session.access_token);           
                  
                  res.redirect('/');
              } 
@@ -106,14 +122,13 @@ app.get('/stream', function(req,res){
             res.redirect("/oauthDance");
         }else{
             //Time to do some cool streaming stuff!
-            console.log("GOT IT " + req.session.access_token);
-            var client = new faye.Client('https://na6.salesforce.com/cometd');
+            var endpoint = req.session.instance_url+'/cometd';
+            
+            console.log("Creating a client for "+endpoint);
+            var client = new faye.Client(endpoint);
             
             var cookies = {
                 sid: req.session.access_token,  //We grabbed this from the oauthDance
-                login: config.LOGIN,  //you@yourorg.com
-                "com.salesforce.LocaleInfo":"us",
-                language: "en_US",
             };
             //A neat hack to pass in oauth and login information
             client.addExtension({
@@ -125,7 +140,8 @@ app.get('/stream', function(req,res){
               },              
             });
             
-            var subscription = client.subscribe('/TestTopic', function(message) {
+            console.log('Subscribing to '+config.PUSH_TOPIC);
+            var subscription = client.subscribe('/'+config.PUSH_TOPIC, function(message) {
                 console.log("HEY LOOK GOT A SWEET MSG " + JSON.stringify(message));
             });
             
