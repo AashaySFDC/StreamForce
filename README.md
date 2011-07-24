@@ -27,6 +27,7 @@ Usage
     exports.CLIENT_SECRET = process.env.CLIENT_SECRET || 'superSecret';
 
     exports.LOGIN = "you@yourorg.com";
+    exports.PUSH_TOPIC = 'TestTopic';
 </pre>
 9. node server.js 
 
