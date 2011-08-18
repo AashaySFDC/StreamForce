@@ -16,7 +16,7 @@ Usage
 8. Create a file called config.js at the root of your app (same place as server.js) and make it look like the following:
 <pre>
     
-    exports.PORT = process.env.PORT || 4567; 
+    exports.PORT = parseInt(process.env.PORT) || 4567; 
     exports.cookieMaxAge = 3600000; //length of idle session in ms
     exports.sessionSecret = process.env.SESSION_SECRET || "someSessionSecret";
 
