@@ -1,4 +1,4 @@
-Force.com Streaming Pilot demo in Node!
+THIS ENTIRE PROJECT IS DEPRECATED, DO NOT USE!
 ====================================
 
 Before you attempt to try this thing, make sure you have a PushTopic created in your org according to the official docs.  Once your server is up and running, create an object in your org using the API or whatever you want.
